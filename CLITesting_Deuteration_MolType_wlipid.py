@@ -533,7 +533,7 @@ def _parse_topology(lpd_res='POPC')->dict:
     ## Mostly using CHARMM naming conventions for ease of use
     rnaselect = 'resname URA U' # only Uracil in RNA
     dnaselect = 'resname THY DT T' # only Thymine in DNA
-    protselect = 'resname ARG ALA ASP ASN HIS HIE HID HIP LYS PRO GLY GLU GLN TRP TYR SER THR CYS VAL ILE LEU MET PHE'
+    protselect = 'resname ARG ALA ASP ASN HIS HIE HID HIP HSD HSE LYS PRO GLY GLU GLN TRP TYR SER THR CYS VAL ILE LEU MET PHE'
     lipidselect = 'resname {}'.format(lpd_res)## is this smart way to select the 
     #carbselect = ''
     #ionselect = "resname SOD CLA Na Cl" ## Add more later
