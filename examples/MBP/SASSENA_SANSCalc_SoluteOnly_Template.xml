@@ -1,0 +1,178 @@
+<root>
+
+ 
+
+<database>
+
+   <type>file</type>
+
+   <file>../database/db-neutron-coherent.xml</file>
+
+ </database>
+
+ 
+
+ 
+
+<sample>         
+
+ 
+
+            <structure>
+
+                                    <file>Template_PDBs/XXTEMPFNAMEXX</file>
+
+                                    <format>pdb</format>           
+
+            </structure>                 
+
+ 
+
+            <framesets>
+
+                        <frameset>                             
+
+                                    <file>./step5_3_nopbc.dcd</file>
+
+                                    <format>dcd</format>                                               
+
+                                    <first>10</first> 
+
+                                    <last>11</last>
+				    <stride>1</stride>
+
+                        </frameset>                 
+
+            </framesets>
+
+ 
+
+            <selections>
+
+                        <selection>
+
+                                    <type>range</type>
+
+                                    <from>5964</from> 
+
+                                    <to>129165</to>
+
+                                    <name>water</name>
+
+                        </selection>
+
+                        <selection>
+
+                                    <type>range</type>
+
+                                    <from>0</from>
+
+                                    <to>5963</to>
+
+                                    <name>solute</name>
+
+                        </selection>
+
+            </selections>
+
+</sample>
+
+ 
+
+<scattering>    
+
+            <type>all</type>         
+
+            <dsp>
+
+                        <type>square</type>                 
+
+                        <method>fftw</method>
+
+            </dsp>
+
+            <vectors>
+
+                        <type>scans</type>
+
+                        <scans>
+
+                                    <scan>
+
+                                                <from>0</from> 
+
+                                                <to>1.2</to>
+
+                                                <points>100</points> 
+
+                                                <base>
+
+                                                <x>0.5</x>
+
+                                                            <y>0</y>
+
+                                                            <z>0</z> 
+
+                                               </base>  
+
+                                    </scan>
+
+                                    </scans>
+
+            </vectors>
+
+            <average>
+
+                    <orientation>
+
+                    <type>vectors</type>
+
+                        <vectors>        
+
+                        <type>sphere</type>
+
+                        <algorithm>boost_uniform_on_sphere</algorithm>
+
+                        <resolution>1000</resolution>
+
+                        </vectors>
+
+                        </orientation>
+
+            </average>
+
+ 
+
+            <background>
+
+                        <factor>BCKGRNDFF</factor>
+
+                        <kappas>
+
+                                    <kappa>
+
+                                                <selection>water</selection> 
+
+                                                <value>1.52</value>
+
+                                    </kappa>
+
+                                    <kappa>
+
+                                                <selection>solute</selection>
+
+                                                <value>1.00</value>
+
+                                    </kappa>
+
+                        </kappas>
+
+            </background>
+
+</scattering>
+
+ 
+
+<stager><target>solute</target></stager>
+
+</root>
