@@ -134,23 +134,25 @@ def _read_sassena(filesdf):
     
         sass_keys = list(sass_out.keys())
         print(sass_keys)
-        qvectors = np.array((sass_out.get(sass_keys[5])))
+        #qvecndx = np.where(sass_keys=='qvectors')
+        #print(qvecndx)
+        qvectors = np.array((sass_out.get('qvectors')))
         axis_qvec = ~np.all(qvectors==0,axis=0)
-        print(sass_out,qvectors, axis_qvec,flush=True)
+        #print(qvectors, axis_qvec,flush=True)
         qvectors = qvectors[:,np.where(axis_qvec)[0][0]]
         
     sasmindex = filesdf.set_index(['sD2O','gD2O','nex'])
-    print(sasmindex)
+    #print(sasmindex, qvectors)
     sasdf = pd.DataFrame(index=sasmindex.index, columns=np.sort(qvectors)).fillna(0.0).T
                          
     for index, h5f in filesdf.iterrows():
-        
+        #print(h5f)
         with h5py.File(h5f.filename,'r') as sassh5:
             sass_keys = list(sassh5.keys())
-            qvectors = np.array((sassh5.get(sass_keys[5])))
+            qvectors = np.array((sassh5.get('qvectors')))
             axis_qvec = ~np.all(qvectors==0,axis=0)
             sqv = np.argsort(qvectors[:,np.where(axis_qvec)[0][0]])
-            fq = np.array((sassh5.get(sass_keys[0])))[sqv]
+            fq = np.array((sassh5.get('fq')))[sqv]
             sasdf[(h5f.sD2O, h5f.gD2O, h5f.nex)] = fq[fq!=0.0]
     
     sassenadf_ave = sasdf.groupby(level=[0,1], axis=1, sort=False).mean()
@@ -247,7 +249,7 @@ if __name__=='__main__':
             elif 'gD2O' in fspl:
                 gd2o_list.append(int(fspl.split('-')[0]))
             elif 'NEx' in fspl:
-                nex_index.append(int(fspl.split('NEx')[1].lstrip('0')))
+                nex_index.append(int(fspl.split('NEx')[1].lstrip('0').split('.')[0]))
             else:
                 continue;
         
@@ -267,8 +269,8 @@ if __name__=='__main__':
     sasave_map = sasave_map.reset_index().rename(columns={0:'sqrt(I(0))'})
     matchout, sasave_i0_inv = _match_series(sasave_map, filedf['gD2O'].unique(), filedf['sD2O'].unique())
     sasave_i0_inv = sasave_i0_inv.reset_index().rename(columns={'index':'sD2O',0:'sqrt(I(0))'})
-    sasave_i0_inv.to_csv('test_i0inv.csv')
-    #print(matchout)
+    sasave_i0_inv.to_csv('sqrtI0_Inverted.csv')
+    print(matchout)
     print('The percent solvent D2O matchout condition for {} growth D2O is {}'.format(matchout[0][0],matchout[0][1]))
     
          
