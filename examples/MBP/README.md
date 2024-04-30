@@ -1,5 +1,4 @@
-
-##Files for the running a contrast matchpoint calculation on Maltose Binding Protein
+#Files for the running a contrast matchpoint calculation on Maltose Binding Protein
 
 The files include XML input files for SASSENA, the pdb for maltose binding protein prepared with CHARMM-GUI (1OMP) with histag added and an example SLURM submission script to use on CADES ORNL to run the calculations.  
 "SASSENA_FACTORCalc.xml": The xml script to calculate the background scattering length density of the solvent 
