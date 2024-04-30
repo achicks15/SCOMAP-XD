@@ -1,0 +1,11 @@
+
+
+Example call for the lipid nanodisc by Maric, et. al. (2013). "Stealth carriers for low-resolution structure determination of membrane proteins in solution". doi:10.1107/S1399004713027466
+
+This will generate one deuterated template with growth for the protein scaffoled at 85% growth in 100% solvent D2O with the acylchains deuterated at 92% and the head group deuterated at 78%.
+
+python3 ~/anaconda_SCOMAPXD/pyscripts/deuterate.py -g "85/85" -s "100" -p msp1d1_popc -n 1 --ldtype_fracd "POPC-0.92/0.92/0.78" ./step5_input.pdb
+
+This can theoretically be expanded to multilipid nanodiscs and systems by separating the different lipid types with a comma in the --ldtype_fracd flag string, i.e. "POPC-0.92/0.92/0.78,POPE-0.92/0.92/0.0" if POPE is in your system. 
+
+
