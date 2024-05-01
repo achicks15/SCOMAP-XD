@@ -1,0 +1,13 @@
+Example deuterated templates and old scripts for the CLI_ContrastMatching_Deuteration.py calls for segmental deuteration using the TIA1 example from Sonntag, et. al.(2017) Angewandte Chemie. https://doi.org/10.1002/anie.201702904
+
+The old deuteration script is necessary for the perdeuteration as the deuterate.py script doesn't have the segmental deuteration functionality fully implemented yet with the multi-chain functionality. The CLITesting_ContrastMatching_Deuteration.py will only work on single proteins. 
+
+2H-RRM1 + 1H-RRM23: 
+python3 ../../old_scripts/CLITesting_ContrastMatching_Deuteration.py -d -g "0" -s "100.0" -p "TIA1_2HRRM1" -n 1 ./step3_input.pdb TIA1-LPQTG-2H_RRM1.pdb
+
+1H-RRM1 + 2H-RRM23: 
+python3 ../../old_scripts/CLITesting_ContrastMatching_Deuteration.py -d -g "0" -s "100.0" -p "TIA1_2HRRM23" -n 1 ./step3_input.pdb TIA1-LPQTG-2H_RRM23.pdb
+
+Perdeuterate:
+python3 ../../old_scripts/CLITesting_ContrastMatching_Deuteration.py -d -g "0" -s "100.0" -p "TIA1_Perdeut" -n 1 ./step3_input.pdb TIA1-LPQTG-2H_Perdeut.pdb
+
