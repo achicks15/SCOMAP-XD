@@ -7,7 +7,7 @@ module load anaconda3 sassena
 source activate ~/anaconda_SCOMAPXD/SCOMAPXD
 
 ## Deuterate the pdb step4_minim_vmd.pdb at solvent D2O conditions 0,20,40,60,80,90, and 100 % D2O at each growth condition 0,85
-python3 ~/anaconda_SCOMAPXD/pyscripts/deuterate.py -s "0,20,40,60,80,90,100" -g "0,85" -n 20 -p "MBP" ./step4_minim_vmd.pdb
+python3 ../../deuterate.py -s "0,20,40,60,80,90,100" -g "0,85" -n 20 -p "MBP" ./step4_minim_vmd.pdb
 
 ## SASSENA Calculation
 for gd2o in 0 20 40 70 85 100
