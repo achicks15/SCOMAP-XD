@@ -115,7 +115,7 @@ if __name__=='__main__':
     xml_typedatabase.text = 'file'
     xml_filedatabase = xmet.SubElement(xml_database,'file')
     ## make a variable? # 
-    xml_filedatabase.text = "/home/9cq/anaconda_SassConMatch/database/db-neutron-coherent.xml"
+    xml_filedatabase.text = "/home/9cq/anaconda_SCOMAPXD/database/db-neutron-coherent.xml"
 
     ## Sample 
     ## Sample Structure
@@ -200,7 +200,7 @@ if __name__=='__main__':
     ## Scattering Background
     scatter_back = xmet.SubElement(xml_scattering, 'background')
     scatter_backfact = xmet.SubElement(scatter_back, 'factor')
-    scatter_backfact.text = "{:.4f}".format(args.background)
+    scatter_backfact.text = "{:.8f}".format(args.background)
     scatter_kappas = xmet.SubElement(scatter_back, 'kappas')
     for sname, ndx_vals in zip(args.sel_name[0], args.kappas[0]):
         print("setting the Kappa value for Selection:{} to {}".format(sname,ndx_vals))
