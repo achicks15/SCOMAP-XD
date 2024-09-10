@@ -84,23 +84,31 @@ def calc_hbonds(selstr, solbool=False):
     protein_traj = PDB.atom_slice(protein_select)
     hbonds_bh = md.baker_hubbard(protein_traj)
     
+    ndx2ndx_map = {sliced_trajndx:fullpdbndx for sliced_trajndx, fullpdbndx in zip(protein_traj.top.select('all'),protein_select)}
+    #hbonds_ndxkey = np.vectorize(ndx2ndx_map.__getitem__)(hbonds_bh)
+    #print(hbonds_ndxkey)
+#    pd.DataFrame(hbonds_ndxkey).apply(lambda hbdkey: '-'.join(hbdkey.astype(str),axis=1).values
     #label = lambda hbond : '{} -- {}'.format(PDB.topology.atom(hbond[0]), PDB.topology.atom(hbond[2]))
     hbond_array = []
     for hbond in hbonds_bh:
-        hbond_array.append([protein_traj.topology.atom(hbond[0]), hbond[0],
-                            protein_traj.topology.atom(hbond[1]), hbond[1],
-                            protein_traj.topology.atom(hbond[2]), hbond[2]])
+        hbond_array.append([protein_traj.topology.atom(hbond[0]), ndx2ndx_map[hbond[0]],
+                            protein_traj.topology.atom(hbond[1]), ndx2ndx_map[hbond[1]],
+                            protein_traj.topology.atom(hbond[2]), ndx2ndx_map[hbond[2]]])
     
     if solbool:
-        nhb_counts = (pd.DataFrame(hbond_array)[0].astype(str) 
+        nhb_counts = (pd.DataFrame(hbond_array)[0].astype(str) + '-' + pd.DataFrame(hbond_array)[1].astype(str) 
                       + ' - ' + pd.DataFrame(hbond_array)[2].astype(str) 
                       + ' - ' + pd.DataFrame(hbond_array)[3].astype(str)
                      ).value_counts(sort=False)
+        #nhb_counts_ndx = pd.DataFrame(hbonds_ndxkey).apply(lambda hbdkey: '-'.join(hbdkey.astype(str),axis=1)).value_counts(sort=False)
+        
     else:
-        nhb_counts = (pd.DataFrame(hbond_array)[0].astype(str) 
+        nhb_counts = (pd.DataFrame(hbond_array)[0].astype(str) + '-' + pd.DataFrame(hbond_array)[1].astype(str) 
                       + ' - ' + pd.DataFrame(hbond_array)[2].astype(str) 
                       #+ ' - ' + pd.DataFrame(hbond_array)[3].astype(str)
                      ).value_counts(sort=False)
+        #nhb_counts_ndx = pd.DataFrame(hbonds_ndxkey[:,:2]).apply(lambda hbdkey: '-'.join(hbdkey.astype(str), axis=1)).value_counts(sort=False)
+
     return hbond_array, nhb_counts
 
 def calc_ncontacts(selstr, hex_list, cutoff = 6.5):
@@ -564,6 +572,8 @@ def _parse_topology(lpd_res='POPC')->dict:
         
         wat = chain_subset.select(watselect)
         #ion = chain_subset.select(ionselect)
+        name=''
+        selatom=''
         if prot.size>0:
             name = 'PROT'
             print('chainID {} is a {} molecule with {} atoms'.format(chain.index, name, chain_subset.n_atoms))
@@ -588,16 +598,19 @@ def _parse_topology(lpd_res='POPC')->dict:
             selatom = lipidselect
             lipidpres= True
             sys_chain.append(str(chain.index))
+        
         #elif ion.size>0:
         #    name = 'ION'
         #    selatom = ionselect
         #    print('chainID {} is a {} molecule with {} atoms'.format(chain.index, name, dna.size))
-            
+         
         elif wat.size>0:
             name='WAT'
             selatom = watselect
             print('chainID {} is a {} molecule with {} atoms'.format(chain.index, name, chain_subset.n_atoms))
+        
         else:
+            
             del name
             del selatom
             continue
@@ -771,18 +784,22 @@ def _add_structurefactors(exhdf, selstr, solute=False):
     
     try:
         hbond_array, nhb_counts = calc_hbonds(selstr, solbool=solute)
+        #print(nhb_counts)
         if solute:
             ## only need to do this due to multimers of the same system for solute
-            exhdf['BondPair'] = (exhdf['HA_Donor'].astype('str') 
+            exhdf['BondPair'] = (exhdf['HA_Donor'].astype('str') + '-' + exhdf['HA_Donor_Index'].astype('str')
                                  + ' - ' + exhdf['ExH'].astype('str')
                                  + ' - ' + exhdf['H_Index'].astype('str')
                                 )
         else:
-            exhdf['BondPair'] = (exhdf['HA_Donor'].astype('str') 
+            exhdf['BondPair'] = (exhdf['HA_Donor'].astype('str') + '-' + exhdf['HA_Donor_Index'].astype('str') 
                                  + ' - ' + exhdf['ExH'].astype('str')
                                  # + ' - ' + exhdf['H_Index'].astype('str')
                                 )
         
+        #nhb_counts.index.name = 'BondPair'
+        #nhb_counts = nhb_counts.reset_index()
+        #exhdf = exhdf.merge(nhb_counts, left_on = 'BondPair', right_on='BondPair')
         exhdf = exhdf.set_index('BondPair')
         exhdf.loc[nhb_counts.index, 'N_HydBonds'] = nhb_counts.values
         exhdf = exhdf.reset_index()
