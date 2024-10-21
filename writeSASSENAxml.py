@@ -115,7 +115,7 @@ if __name__=='__main__':
     xml_typedatabase.text = 'file'
     xml_filedatabase = xmet.SubElement(xml_database,'file')
     ## make a variable? # 
-    xml_filedatabase.text = "/home/9cq/anaconda_SCOMAPXD/database/db-neutron-coherent.xml"
+    xml_filedatabase.text = "./database/db-neutron-coherent.xml"
 
     ## Sample 
     ## Sample Structure
