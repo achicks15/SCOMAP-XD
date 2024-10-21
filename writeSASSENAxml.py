@@ -3,7 +3,7 @@
 """
 Created on Mon Aug 22 16:38:16 2022
 
-@author: 9cq
+@author: Alan Hicks
 """
 
 from lxml.etree import ElementTree as ET
